@@ -51,22 +51,51 @@ export const validateForm = (data) => {
   }
 }
 
-// Form submission handler (placeholder - in real app would send to backend)
+// Form submission handler - posts to n8n webhook
 export const submitFormData = async (data) => {
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 1000))
-  
-  console.log('Form submitted with data:', data)
-  
-  // In a real application, this would:
-  // 1. Send data to your backend API
-  // 2. Store in database with proper GDPR compliance
-  // 3. Send confirmation email
-  // 4. Add to email marketing list (if consent given)
-  
-  return {
-    success: true,
-    message: 'Thank you! We\'ll notify you as soon as the course is ready.',
-    data
+  try {
+    // Prepare the data for submission
+    const submissionData = {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      gdprConsentAndUpdates: data.gdprConsentAndUpdates,
+      wantTips: data.wantTips || false,
+      submittedAt: new Date().toISOString(),
+      source: 'AI Productivity Course Landing Page'
+    }
+    
+    console.log('Submitting form data:', submissionData)
+    
+    // Post to n8n webhook
+    const response = await fetch('https://n8n.makertechnologies.at/webhook/studentcourse-landingpage/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(submissionData)
+    })
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    
+    const result = await response.json()
+    console.log('Webhook response:', result)
+    
+    return {
+      success: true,
+      message: 'Thank you! We\'ll notify you as soon as the course is ready.',
+      data: submissionData
+    }
+    
+  } catch (error) {
+    console.error('Form submission error:', error)
+    
+    return {
+      success: false,
+      message: 'Something went wrong. Please try again or contact support.',
+      error: error.message
+    }
   }
 } 
