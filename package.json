@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "description": "Landing page for AI Productivity Course for Students - collecting sign-ups to validate market demand",
   "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
