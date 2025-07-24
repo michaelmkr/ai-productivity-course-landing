@@ -1,0 +1,21 @@
+/* 
+ * Global base styles for the AI Productivity Course Landing Page
+ * Main styles are in App.css - this file contains only essential resets
+ */
+
+html {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
